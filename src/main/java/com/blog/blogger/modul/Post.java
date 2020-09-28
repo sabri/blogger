@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -33,12 +31,12 @@ public class Post {
     private String description;
     private Integer voteCount;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    @JoinColumn
     private User user;
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name="id", referencedColumnName = "id")
-    private Suberddit suberddit;
-    
+    @JoinColumn
+    private Blogger blogger;
+
 
 
 }
