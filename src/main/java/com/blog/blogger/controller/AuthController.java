@@ -1,17 +1,11 @@
 package com.blog.blogger.controller;
 
 import com.blog.blogger.controller.dto.RegisterRequest;
+import com.blog.blogger.controller.dto.RequestLogin;
 import com.blog.blogger.service.AuthService;
-import lombok.AllArgsConstructor;
-import net.bytebuddy.asm.Advice;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -29,6 +23,16 @@ authService.signup(registerRequest);
 return new ResponseEntity<>("user Registration successful", HttpStatus.OK);
     }
 
-    
-    
+    @GetMapping(value = "accountVerification/{token}")
+    public ResponseEntity<String> verfication(@PathVariable String token){
+        authService.verifyToken(token);
+        return new ResponseEntity<>("account is verified ", HttpStatus.OK);
+
+    }
+    @PostMapping(value = "/login")
+    public ResponseEntity<String> login(@RequestBody RequestLogin login){
+        authService.login(login);
+        return new ResponseEntity<>("you are welcome", HttpStatus.OK);
+    }
+
 }
