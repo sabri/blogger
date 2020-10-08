@@ -1,5 +1,6 @@
 package com.blog.blogger.controller;
 
+import com.blog.blogger.controller.dto.AuthenticationResponse;
 import com.blog.blogger.controller.dto.RegisterRequest;
 import com.blog.blogger.controller.dto.RequestLogin;
 import com.blog.blogger.service.AuthService;
@@ -24,15 +25,14 @@ return new ResponseEntity<>("user Registration successful", HttpStatus.OK);
     }
 
     @GetMapping(value = "accountVerification/{token}")
-    public ResponseEntity<String> verfication(@PathVariable String token){
+    public ResponseEntity<String> verification(@PathVariable String token){
         authService.verifyToken(token);
         return new ResponseEntity<>("account is verified ", HttpStatus.OK);
 
     }
     @PostMapping(value = "/login")
-    public ResponseEntity<String> login(@RequestBody RequestLogin login){
-        authService.login(login);
-        return new ResponseEntity<>("you are welcome", HttpStatus.OK);
+    public AuthenticationResponse login(@RequestBody RequestLogin login){
+       return authService.loginJWT(login);
     }
 
 }

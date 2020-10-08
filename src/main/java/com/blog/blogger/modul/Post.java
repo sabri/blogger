@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import java.time.Instant;
+
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -36,6 +38,7 @@ public class Post {
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn
     private Blogger blogger;
+    private Instant createdDate;
 
 
 
