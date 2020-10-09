@@ -1,15 +1,16 @@
 package com.blog.blogger.service;
 
-import com.programming.techie.springredditclone.dto.CommentsDto;
-import com.programming.techie.springredditclone.exceptions.PostNotFoundException;
-import com.programming.techie.springredditclone.mapper.CommentMapper;
-import com.programming.techie.springredditclone.model.Comment;
-import com.programming.techie.springredditclone.model.NotificationEmail;
-import com.programming.techie.springredditclone.model.Post;
-import com.programming.techie.springredditclone.model.User;
-import com.programming.techie.springredditclone.repository.CommentRepository;
-import com.programming.techie.springredditclone.repository.PostRepository;
-import com.programming.techie.springredditclone.repository.UserRepository;
+
+import com.blog.blogger.controller.dto.CommentsDto;
+import com.blog.blogger.exceptions.PostNotFoundException;
+import com.blog.blogger.mapper.CommentMapper;
+import com.blog.blogger.modul.Comment;
+import com.blog.blogger.modul.NotificationEmail;
+import com.blog.blogger.modul.Post;
+import com.blog.blogger.modul.User;
+import com.blog.blogger.repository.CommentRepository;
+import com.blog.blogger.repository.PostRepository;
+import com.blog.blogger.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

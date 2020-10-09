@@ -1,16 +1,17 @@
 package com.blog.blogger.service;
 
-import com.programming.techie.springredditclone.dto.PostRequest;
-import com.programming.techie.springredditclone.dto.PostResponse;
-import com.programming.techie.springredditclone.exceptions.PostNotFoundException;
-import com.programming.techie.springredditclone.exceptions.SubredditNotFoundException;
-import com.programming.techie.springredditclone.mapper.PostMapper;
-import com.programming.techie.springredditclone.model.Post;
-import com.programming.techie.springredditclone.model.Subreddit;
-import com.programming.techie.springredditclone.model.User;
-import com.programming.techie.springredditclone.repository.PostRepository;
-import com.programming.techie.springredditclone.repository.SubredditRepository;
-import com.programming.techie.springredditclone.repository.UserRepository;
+import com.blog.blogger.controller.dto.PostRequest;
+import com.blog.blogger.controller.dto.PostResponse;
+import com.blog.blogger.exceptions.PostNotFoundException;
+import com.blog.blogger.exceptions.SubredditNotFoundException;
+import com.blog.blogger.mapper.PostMapper;
+import com.blog.blogger.modul.Blogger;
+import com.blog.blogger.modul.Post;
+import com.blog.blogger.modul.User;
+import com.blog.blogger.repository.BloggerRepository;
+import com.blog.blogger.repository.PostRepository;
+
+import com.blog.blogger.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,13 +29,13 @@ import static java.util.stream.Collectors.toList;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final SubredditRepository subredditRepository;
+    private final BloggerRepository bloggerRepository;
     private final UserRepository userRepository;
     private final AuthService authService;
     private final PostMapper postMapper;
 
     public void save(PostRequest postRequest) {
-        Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
+       Blogger subreddit = bloggerRepository.findByName(postRequest.getSubredditName())
                 .orElseThrow(() -> new SubredditNotFoundException(postRequest.getSubredditName()));
         postRepository.save(postMapper.map(postRequest, subreddit, authService.getCurrentUser()));
     }
@@ -56,9 +57,9 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<PostResponse> getPostsBySubreddit(Long subredditId) {
-        Subreddit subreddit = subredditRepository.findById(subredditId)
+       Blogger blogger = bloggerRepository.findById(subredditId)
                 .orElseThrow(() -> new SubredditNotFoundException(subredditId.toString()));
-        List<Post> posts = postRepository.findAllBySubreddit(subreddit);
+        List<Post> posts = postRepository.findByBlogger(blogger);
         return posts.stream().map(postMapper::mapToDto).collect(toList());
     }
 

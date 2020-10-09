@@ -1,4 +1,4 @@
-package com.blog.blogger.security;
+package com.blog.blogger.jwt;
 
 import com.blog.blogger.exceptions.SpringException;
 import io.jsonwebtoken.Claims;

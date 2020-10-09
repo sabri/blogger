@@ -10,7 +10,7 @@ import com.blog.blogger.modul.User;
 import com.blog.blogger.modul.VerificationToken;
 import com.blog.blogger.repository.UserRepository;
 import com.blog.blogger.repository.VerificationTokenRepository;
-import com.blog.blogger.security.JwtProvider;
+import com.blog.blogger.jwt.JwtProvider;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -35,7 +35,6 @@ private final  VerificationTokenRepository verificationTokenRepository;
 private final MailService mailService;
 private final AuthenticationManager authenticationManager;
 private final JwtProvider jwtProvider;
-private RefreshTokenRequest refreshTokenRequest;
     private final RefreshTokenService refreshTokenService;
 
     public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, MailService mailService, AuthenticationManager authenticationManager, JwtProvider jwtProvider, RefreshTokenService refreshTokenService) {
@@ -97,11 +96,17 @@ private RefreshTokenRequest refreshTokenRequest;
 
     }
 
-    public   AuthenticationResponse loginJWT(RequestLogin login) {
-   Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(),login.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = jwtProvider.generateToken(authentication);
-        return new AuthenticationResponse(token, loginJWT.getUsername());
+    public AuthenticationResponse loginJWT(RequestLogin loginRequest) {
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtProvider.generateToken(authenticate);
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
+                .username(loginRequest.getUsername())
+                .build();
     }
     public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());

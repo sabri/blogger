@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface BloggerMap {
 
-    @Mapping(target = "numberOfPosts", expression = "java(mapPosts(subreddit.getPosts()))")
+    @Mapping(target = "numberOfPosts", expression = "java(mapPosts(blogger.getPosts()))")
    Bloggerdto mapBloggerToDto(Blogger blogger);
 
     default Integer mapPosts(List<Post> numberOfPosts) {
